@@ -2,28 +2,41 @@ import { QuantityInput } from "../../../../components/QuantityInput"
 import { RegularText, TitleText } from "../../../../components/Typography"
 import { CoffeeCardContainer, Name, Tags, Description, CardFooter, AddCartWrapper } from "./styles"
 import { ShoppingCart } from "phosphor-react"
+import { formatMoney } from "../../../../utils/formatMoney"
 
+export interface Coffee {
+    id: number,
+    tags: string[],
+    name: string,
+    description: string,
+    photo: string,
+    price: number
+}
 
-export const CoffeCard = () => {
+interface CoffeProps {
+    coffee: Coffee;
+}
+
+export const CoffeCard = ({ coffee }: CoffeProps ) => {
+    const formattedPrice = formatMoney(coffee.price)
+
     return(
         <CoffeeCardContainer>
-            <img src="https://s3-alpha-sig.figma.com/img/55b1/f9ee/64600f98b2bae456b96fdc624c4b4f47?Expires=1661731200&Signature=RVBGb52TcoTCxpF8H0jN8n2Akbq4wL6V70JeXd7rEEpZ2DD9QHLClUqykdvSZTG2jlW1iZUQFs8JsetrLh1vCsfqZZQTQcDvipXc3CKoA33cX9~vz0QFt~R0lvTgrk-oQaNCpc~IvayMDq-uJwi8Zp9qZCKYVC5J2rL0YkFCFc1k5vA1zg2rgc7c2xp3gvhQxwgpMCeuCX47-u87uVHYZmyiRrKzFUfY2M2Rryh7gPqVe50bjfc6MApE6xq7laHVbhwlEsROiUfP8PM0roXLAz-pUubMjkawLSqwzv6xp-vE~Wl3AyqVOTJST6E-fQtNc-bIIKY-zEYeNttT3ICz8w__&Key-Pair-Id=APKAINTVSUGEWH5XD5UA"/>
+            <img src={`/coffees/${coffee.photo}`} />
 
             <Tags>
-                <span>Tradicional</span>
-                <span>com leite</span>
+                {coffee.tags.map(tag => (
+                    <span key={`${coffee.id}${tag}`}>{tag}</span>
+                ))}
             </Tags>
 
-            <Name>
-                Expresso Tradicional
-            </Name>
-            <Description>
-                O tradicional café feito com água quente e grãos moídos
-            </Description>
+            <Name>{coffee.name}</Name>
+            <Description>{coffee.description}</Description>
+
             <CardFooter>
                 <div>
                     <RegularText size="s">R$</RegularText>
-                    <TitleText size="m" color="text" as="strong">9,90</TitleText>
+                    <TitleText size="m" color="text" as="strong">{formattedPrice}</TitleText>
                 </div>
 
                 <AddCartWrapper>
